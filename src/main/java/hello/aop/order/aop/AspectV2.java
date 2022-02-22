@@ -13,7 +13,7 @@ public class AspectV2 {
     // hello.aop.order 패키지와 하위 패키지
    @Pointcut("execution(* hello.aop.order..*(..))")
    private void allOrder(){} // pointcut signature
-
+                             // 수업 언급 : parameter가 들어가면 그것까지 맞춰줘야 한다.
     @Around("allOrder()") // 포인트컷
     public Object doLog(ProceedingJoinPoint joinPoint) throws Throwable // 어드바이스
     {

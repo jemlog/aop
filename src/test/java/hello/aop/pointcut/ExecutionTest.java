@@ -14,12 +14,13 @@ import java.lang.reflect.Method;
 @Slf4j
 public class ExecutionTest {
 
-    AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+    AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut(); // POINTCUT 상속
     Method helloMethod;
 
     @BeforeEach
     public void init() throws NoSuchMethodException
     {
+        // 리플렉션으로 메서드 정보를 뽑는다! 파라미터 타입이 STRING!
         helloMethod = MemberServiceImpl.class.getMethod("hello", String.class);
     }
 
@@ -35,7 +36,10 @@ public class ExecutionTest {
     void exactMatch()
     {
         // String은 패키지명 생략 가능!   // 접근제어자, 반환타입 선언타입 메서드이름 파라미터
+       // pointcut.setExpression("execution(public String hello.aop.member.MemberServiceImpl.hello(String))");
+        // 선언타입 = 패키지 + 클래스
         pointcut.setExpression("execution(public String hello.aop.member.MemberServiceImpl.hello(String))");
+        // TODO : pointcut.match(pointcut)이 MemberServiceImpl.class의 helloMethod와 같은지를 체크하는 로직
         Assertions.assertThat(pointcut.matches(helloMethod,MemberServiceImpl.class)).isTrue();
     }
 
@@ -49,7 +53,7 @@ public class ExecutionTest {
 
     @Test
     void nameMatch()
-    {
+    {                                      // hello는 method이름이다.
         pointcut.setExpression("execution(* hello(..))");
         Assertions.assertThat(pointcut.matches(helloMethod,MemberServiceImpl.class)).isTrue();
     }
@@ -119,7 +123,7 @@ public class ExecutionTest {
     @Test
     void typeMatchSuperType()
     {                    // 만약 인터페이스를 타입으로 만든다면? 성공! 부모 타입으로 매칭해도 성공한다!!
-        pointcut.setExpression("execution(* hello.aop.member.MemberService.*(..))");
+        pointcut.setExpression("execution(* hello.aop.member.MemberService.*(..))"); // 부모타입 조회 가능!
         Assertions.assertThat(pointcut.matches(helloMethod,MemberServiceImpl.class)).isTrue();
     }
 
@@ -132,6 +136,7 @@ public class ExecutionTest {
         Assertions.assertThat(pointcut.matches(internalMethod,MemberServiceImpl.class)).isTrue();
     }
 
+    // TODO : 부모타입으로 타입 가져올때는 오버라이드한 메서드만 매치할 수 있다!
     @Test
     void typeMatchNoSuperTypeMethod() throws NoSuchMethodException
     {                    // 부모 타입에 선언한 메서드만 포인트컷 가능하다! 즉, 인터페이스에 선언한 것만 가능!!!
