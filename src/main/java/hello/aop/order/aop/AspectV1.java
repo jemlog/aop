@@ -10,8 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 public class AspectV1 {
 
 
-
-
     @Around("execution(* hello.aop.order..*(..))") // 포인트컷
     public Object doLog(ProceedingJoinPoint joinPoint) throws Throwable // 어드바이스
     {

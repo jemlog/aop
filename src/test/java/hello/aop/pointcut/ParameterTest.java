@@ -1,6 +1,7 @@
 package hello.aop.pointcut;
 
 import hello.aop.member.MemberService;
+import hello.aop.member.annotation.MethodAop;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -65,6 +66,12 @@ public class ParameterTest {
         public void targetArgs(JoinPoint joinPoint,MemberService obj)
         {
             log.info("[target]{}, obj={}",joinPoint.getSignature(),obj.getClass());
+        }
+
+        @Before("allMember() && @annotation(annotation)")
+        public void atAnnotation(JoinPoint joinPoint, MethodAop annotation)
+        {
+            log.info("[@annotation]{}, annotationValue={}",joinPoint.getSignature(),annotation.value());
         }
     }
 }
