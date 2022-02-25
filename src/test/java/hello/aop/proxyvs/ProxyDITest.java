@@ -18,7 +18,7 @@ public class ProxyDITest {
     MemberService memberService;
 
     @Autowired
-    MemberServiceImpl memberServiceImpl;
+    MemberServiceImpl memberServiceImpl; // 즉 jdk 동적 프록시로 만들었다면 MemberServiceImpl이 뭔지 모르기 때문에 대입 불가
     // JDK 동적 프록시는 IMPL로 들어오지 못한다! 캐스팅 실패!
 
     @Test
